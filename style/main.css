@@ -1,0 +1,12 @@
+#main-body{
+  display: flex;
+  justify-content: center;
+
+}
+
+#code-sandbox {
+  width: 460px;
+  min-height: 590px;
+  display: block;
+  overflow: auto;
+}
