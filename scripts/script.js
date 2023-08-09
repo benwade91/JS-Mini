@@ -2,7 +2,7 @@ const codeContent = document.querySelector('#editor');
 const codeOutput = document.querySelector('#output');
 const consoleOutput = document.querySelector('#console');
 const executeBtn = document.querySelector('#execute');
-const clearEditorBtn = document.querySelector('#clear');
+const clearConsoleBtn = document.querySelector('#clear');
 const lineCounter = document.querySelector('#line-counter');
 
 const autoCloseChars = new Map([
@@ -23,14 +23,19 @@ function runCode() {
       consoleOutput.innerHTML += message + '<br />';
     }
   }
-  let result = eval(code);
+  let result
+  try {
+    result = eval(code);
+  } catch (e) {
+    result = e.message;
+  }
   if (typeof result === "object") result = JSON.stringify(result);
   codeOutput.innerHTML = result;
 }
 
-function clearEditor() {
-  codeContent.value = '';
-  handleLineCount();
+function clearConsole() {
+  consoleOutput.innerHTML = '';
+  codeOutput.innerHTML = '';
 }
 
 function handleAutoClose(e) {
@@ -74,8 +79,8 @@ function handleIndentation(e) {
     if (char === '}') count--;
   }
   const cursorPosition = selectionStart;
-  if (value[cursorPosition - 1] === '{' && value[cursorPosition] === '}'){
-    e.target.value = beforeCursor + "\n" + ' '.repeat(count * 2) + "\n" + ' '.repeat((count-1) * 2) + afterCursor;
+  if (value[cursorPosition - 1] === '{' && value[cursorPosition] === '}') {
+    e.target.value = beforeCursor + "\n" + ' '.repeat(count * 2) + "\n" + ' '.repeat((count - 1) * 2) + afterCursor;
   } else {
     e.target.value = beforeCursor + "\n" + ' '.repeat(count * 2) + afterCursor;
   }
@@ -88,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // loadCodeFromLocalStorage();
   handleLineCount();
   executeBtn.addEventListener('click', runCode);
-  clearEditorBtn.addEventListener('click', clearEditor);
+  clearConsoleBtn.addEventListener('click', clearConsole);
   codeContent.addEventListener('input', (e) => {
     handleAutoClose(e);
     handleLineCount();

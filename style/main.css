@@ -1,10 +1,12 @@
 #main-body{
   display: flex;
   justify-content: center;
-
+  margin: 0;
+  max-width: 460px;
 }
 
 #code-sandbox {
+  margin: 0;
   width: 460px;
   min-height: 590px;
   display: block;
